@@ -1,4 +1,4 @@
-# weather-forecast
+# Weather Forecast
 Weather Forecast, UI combining SwiftUI + UIKit
 Includes:
 - Openweathermap API
