@@ -19,7 +19,7 @@ class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     let weatherURL = "https://api.openweathermap.org/data/2.5/weather?appid=5c331da8830ced4813a92eea5d23c4d5"
     let forecastURL = "https://api.openweathermap.org/data/2.5/forecast?appid=5c331da8830ced4813a92eea5d23c4d5"
     
-    @Published var weather = WeatherModel()
+    @Published var weather = TodayWeatherModel()
     @Published var forecastList = [ForecastWeatherModel]()
     @Published var forecastOffset: Int = 0
     @Published var weatherDataAvailable: Bool = false
@@ -119,10 +119,10 @@ class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     
-    func parseJSON(weatherData: Data) -> WeatherModel? {
+    func parseJSON(weatherData: Data) -> TodayWeatherModel? {
         let decoder = JSONDecoder()
         do {
-            let decodedData = try decoder.decode(TodayWeatherData.self, from: weatherData)
+            let decodedData = try decoder.decode(TodayWeatherDTO.self, from: weatherData)
             let id = decodedData.weather[0].id
             let cityName = decodedData.name
             let stateName = decodedData.sys.country
@@ -131,7 +131,16 @@ class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             let pressure = decodedData.main.pressure
             let windSpeed = decodedData.wind.speed
             let windDir = decodedData.wind.deg
-            let weather = WeatherModel(conditionId: id, citiName: cityName, stateName: stateName, temperature: temp, pressure: pressure, humidity: humidity, windSpeed: windSpeed, windDir: windDir)
+            let weather = TodayWeatherModel(
+                conditionId: id,
+                cityName: cityName,
+                stateName: stateName,
+                temperature: temp,
+                pressure: pressure,
+                humidity: humidity,
+                windSpeed: windSpeed,
+                windDir: windDir
+            )
             return weather
         } catch {
             print(error)
@@ -145,7 +154,7 @@ class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         let decoder = JSONDecoder()
         do {
             self.forecastList.removeAll()
-            let decodedData = try decoder.decode(ForecastWeatherData.self, from: forecastData)
+            let decodedData = try decoder.decode(ForecastWeatherDTO.self, from: forecastData)
             // print("list size: " + String(decodedData.list.count))
             
             decodedData.list.forEach { forecastItem in
@@ -228,32 +237,5 @@ class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
-    }
-}
-
-
-extension String {
-
-    func toDate(withFormat format: String) -> Date? {
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(identifier: "GMT")
-        dateFormatter.calendar = Calendar(identifier: .gregorian)
-        dateFormatter.dateFormat = format
-        let date = dateFormatter.date(from: self)
-        return date
-    }
-}
-
-extension Date {
-
-    func distance(from date: Date, only component: Calendar.Component, calendar: Calendar = .current) -> Int {
-        let days1 = calendar.component(component, from: self)
-        let days2 = calendar.component(component, from: date)
-        return days1 - days2
-    }
-
-    func isSame(_ component: Calendar.Component, as date: Date) -> Bool {
-        distance(from: date, only: component) == 0
     }
 }

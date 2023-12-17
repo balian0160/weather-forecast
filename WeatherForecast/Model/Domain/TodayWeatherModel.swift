@@ -8,15 +8,15 @@
 import Foundation
 
 
-struct WeatherModel {
+struct TodayWeatherModel {
     let conditionId: Int
-    let citiName, stateName: String
+    let cityName, stateName: String
     let temperature, pressure, humidity: Double
     let windSpeed, windDir: Double
     
     init() {
         self.conditionId = 0
-        self.citiName = ""
+        self.cityName = ""
         self.stateName = ""
         self.temperature = 0.0
         self.pressure = 0.0
@@ -25,9 +25,9 @@ struct WeatherModel {
         self.windDir = 0.0
     }
     
-    init(conditionId: Int, citiName: String, stateName: String, temperature: Double, pressure: Double, humidity: Double, windSpeed: Double, windDir: Double) {
+    init(conditionId: Int, cityName: String, stateName: String, temperature: Double, pressure: Double, humidity: Double, windSpeed: Double, windDir: Double) {
         self.conditionId = conditionId
-        self.citiName = citiName
+        self.cityName = cityName
         self.stateName = stateName
         self.temperature = temperature
         self.pressure = pressure
@@ -35,7 +35,6 @@ struct WeatherModel {
         self.windSpeed = windSpeed
         self.windDir = windDir
     }
-    
     
     var temperatureString: String {
         return String(format: "%.1f", temperature)
@@ -56,7 +55,6 @@ struct WeatherModel {
     var conditionName: String {
         switch conditionId {
         case 200...232:
-            //return "TodayThunderstorm"
             return "cloud.bolt"
         case 300...321:
             return "cloud.drizzle"

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TodayWeatherData: Decodable {
+struct TodayWeatherDTO: Decodable {
     let name: String
     let sys: Country
     let main: Main

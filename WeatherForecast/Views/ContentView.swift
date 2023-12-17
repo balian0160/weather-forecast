@@ -26,13 +26,13 @@ struct ContentView: View {
     var body: some View {
         
         TabView(selection: $selection) {
-            TodayTab()
+            TodayView()
                 .tabItem {
                     Label("Today", systemImage: "paperplane")
                 }
                 .tag(Tab.today)
 
-            ForecastTab()
+            ForecastView()
                 .tabItem {
                     Label("Forecast", systemImage: "questionmark.square")
                 }

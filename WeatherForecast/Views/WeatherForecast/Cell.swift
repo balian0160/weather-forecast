@@ -12,11 +12,11 @@ import UIKit
 class Cell: UITableViewCell {
 
     
-    @IBOutlet weak var cellView: UIView!
-    @IBOutlet weak var predictionLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var tempLabel: UILabel!
-    @IBOutlet weak var imageViewCell: UIImageView!
+    @IBOutlet var cellView: UIView!
+    @IBOutlet var predictionLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
+    @IBOutlet var tempLabel: UILabel!
+    @IBOutlet var imageViewCell: UIImageView!
     
     let screenWidth = UIScreen.main.bounds.size.width
     

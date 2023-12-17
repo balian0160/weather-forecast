@@ -1,87 +1,13 @@
 //
-//  ForecastTab.swift
+//  ForecastTableView.swift
 //  WeatherForecast
 //
-//  Created by Tom Brhel on 26.09.2022.
+//  Created by Tom Brhel on 17.12.2023.
 //
 
 import SwiftUI
 
-struct ActivityIndicator: View {
-    
-    @State var degress = 0.0
-    
-    var body: some View {
-        Circle()
-            .trim(from: 0.0, to: 0.6)
-            .stroke(Color("gradientEndColor"), lineWidth: 10.0)
-            .frame(width: 120, height: 120)
-            .rotationEffect(Angle(degrees: degress))
-            .onAppear(perform: { self.start() })
-    }
-    
-    func start() {
-        _ = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
-            withAnimation {
-                self.degress += 10.0
-            }
-            if self.degress == 360.0 {
-                self.degress = 0.0
-            }
-        }
-    }
-}
-
-struct ForecastTab: View {
-    
-    @EnvironmentObject var weatherManager: WeatherManager
-    @ObservedObject var monitor = NetworkMonitor()
-    
-    let dayOfWeek = Date().dayNumberOfWeek()
-    
-    var body: some View {
-        
-        if !monitor.isConnected {
-            NoConnectionView()
-        } else {
-            NavigationView {
-                
-                if weatherManager.weatherDataAvailable {
-                    VStack {
-                        HStack {
-                            Spacer()
-                              TableView()
-                            Spacer()
-                        }
-                    }.navigationTitle("Forecast")
-                        .font(.system(size: 22, weight: .bold))
-                } else {
-                    if !weatherManager.locationAuthorized {
-                        Text("Search for data")
-                    } else {
-                        VStack {
-                            ActivityIndicator()
-                                .padding()
-                            Text("Trying to get forecast data")
-                                .font(.system(size: 20, weight: .regular))
-                        }
-                    }
-                }
-            }
-        }
-        
-    }
-}
-
-struct ForecastTab_Previews: PreviewProvider {
-    static var previews: some View {
-        ForecastTab()
-            .environmentObject(WeatherManager())
-    }
-}
-
-struct TableView: UIViewRepresentable {
-    
+struct ForecastTableView: UIViewRepresentable {
     @EnvironmentObject var weatherManager: WeatherManager
     
     func makeCoordinator() -> Coordinator {
@@ -257,13 +183,9 @@ struct TableView: UIViewRepresentable {
     }
 }
 
-extension Date {
-    func dayNumberOfWeek() -> Int? {
-        // returns 1 - 7 int, with 1 being a Sunday
-        return Calendar.current.dateComponents([.weekday], from: self).weekday
-    }
-    
-    func nextFiveDays(dayIndex: Int) -> Date? {
-        return Calendar.current.date(byAdding: .day, value: dayIndex, to: Date())
+struct ForecastTableView_Previews: PreviewProvider {
+    static var previews: some View {
+        ForecastTableView()
+            .environmentObject(WeatherManager())
     }
 }
