@@ -8,13 +8,8 @@
 import Foundation
 import CoreLocation
 
-protocol WeatherManagerDelegate {
-    func didUpdateWeather()
-    
-    func wrongCityEntered()
-}
 
-class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+class WeatherManagerVM: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     let weatherURL = "https://api.openweathermap.org/data/2.5/weather?appid=5c331da8830ced4813a92eea5d23c4d5"
     let forecastURL = "https://api.openweathermap.org/data/2.5/forecast?appid=5c331da8830ced4813a92eea5d23c4d5"
@@ -33,8 +28,6 @@ class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     let locationManager = CLLocationManager()
     @Published var locationCoor: CLLocationCoordinate2D?
     @Published var locationFound: Bool = false
-    
-    var delegate: WeatherManagerDelegate?
     
     private var observation: NSKeyValueObservation?
     
@@ -108,8 +101,6 @@ class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                                 self.unitsStringUI = " °F"
                                 self.unitsStringWindUI = " m/h"
                             }
-                            
-                            self.delegate?.didUpdateWeather()
                         }
                     }
                 }
@@ -144,7 +135,6 @@ class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             return weather
         } catch {
             print(error)
-            self.delegate?.wrongCityEntered()
             fetchingError = true
             return nil
         }
@@ -221,12 +211,12 @@ class WeatherManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        let authValue = Int(manager.authorizationStatus.rawValue.description)
+        let authStatus = manager.authorizationStatus
         
-        switch authValue {
-        case 0, 1, 2:
+        switch authStatus {
+        case .notDetermined, .restricted, .denied:
             locationAuthorized = false
-        case 3, 4:
+        case .authorizedAlways, .authorizedWhenInUse:
             locationAuthorized = true
             requestLocation()
         default:

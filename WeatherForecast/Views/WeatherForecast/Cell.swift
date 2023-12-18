@@ -6,17 +6,16 @@
 //
 
 import Foundation
-
 import UIKit
 
-class Cell: UITableViewCell {
 
+class Cell: UITableViewCell {
     
-    @IBOutlet var cellView: UIView!
-    @IBOutlet var predictionLabel: UILabel!
-    @IBOutlet var timeLabel: UILabel!
-    @IBOutlet var tempLabel: UILabel!
-    @IBOutlet var imageViewCell: UIImageView!
+    @IBOutlet private var cellView: UIView!
+    @IBOutlet private var predictionLabel: UILabel!
+    @IBOutlet private var timeLabel: UILabel!
+    @IBOutlet private var tempLabel: UILabel!
+    @IBOutlet private var imageViewCell: UIImageView!
     
     let screenWidth = UIScreen.main.bounds.size.width
     
@@ -43,8 +42,15 @@ class Cell: UITableViewCell {
     }
     
     override func layoutSubviews() {
-       super.layoutSubviews()
+        super.layoutSubviews()
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 5, bottom: 10, right: 5))
-        }
+    }
+    
+    func updateCell(forecast: ForecastWeatherModel, unitsString: String) {
+        imageViewCell.image = UIImage(systemName: forecast.conditionName, withConfiguration: UIImage.SymbolConfiguration(scale: .large))
+        timeLabel.text = forecast.timeString
+        predictionLabel.text = forecast.weatherOutputText
+        tempLabel.text = forecast.temperatureString + unitsString
+    }
     
 }

@@ -9,13 +9,13 @@ import SwiftUI
 import CoreLocation
 
 
-struct TodayView: View, WeatherManagerDelegate {
+struct TodayView: View {
     
     let screenWidth = UIScreen.main.bounds.size.width
     let screenHeight = UIScreen.main.bounds.size.height
     let permissionString = "Please enable location permissions in settings."
     
-    @EnvironmentObject var weatherManager: WeatherManager
+    @EnvironmentObject var weatherManager: WeatherManagerVM
     
     @ObservedObject var monitor = NetworkMonitor()
     
@@ -29,30 +29,8 @@ struct TodayView: View, WeatherManagerDelegate {
     @State var pressureString: String = ""
     @State var weatherOutputTextString: String = ""
     @State var precipitationString: String = ""
+    @State private var showingUnitsOptions = false
     
-    @State private var animationState = false
-    @FocusState private var textFieldIsFocused: Bool
-    
-    
-    // delegate method
-    func didUpdateWeather() {
-        updateWeatherData()
-    }
-    
-    // delegate method, call if wrong city is entered
-    func wrongCityEntered() {
-        let alertController = UIAlertController(title: "Wrong city name", message: "Please enter correct city name.", preferredStyle: UIAlertController.Style.alert)
-               
-               
-        let cancelAction = UIAlertAction(title: "Ok", style: UIAlertAction.Style.cancel)
-        alertController.addAction(cancelAction)
-        
-        let scenes = UIApplication.shared.connectedScenes
-        let windowScene = scenes.first as? UIWindowScene
-        let window = windowScene?.windows.first
-        let rootVC = window?.rootViewController ?? nil
-        rootVC?.present(alertController, animated: true, completion: nil)
-    }
     
     var body: some View {
         
@@ -97,52 +75,27 @@ struct TodayView: View, WeatherManagerDelegate {
                                 state: stateName
                             )
                             .onLongPressGesture(minimumDuration: 2) {
-                                print("Long pressed!")
-                                
-                                let alertController = UIAlertController(title: "Units", message: "Please select between °C and °F.", preferredStyle: UIAlertController.Style.alert)
-                                
-                                let CAction = UIAlertAction(title: "°C", style: .default, handler: { _ in
-                                    // Redirect to Settings app
+                                showingUnitsOptions.toggle()
+                            }
+                            .confirmationDialog("Units", isPresented: $showingUnitsOptions, titleVisibility: .visible) {
+                                Button("°C") {
                                     weatherManager.unitsString = "metric"
                                     weatherManager.requestLocation()
-                                })
-                                
-                                let FAction = UIAlertAction(title: "°F", style: .default, handler: { _ in
-                                    // Redirect to Settings app
+                                }
+                                Button("°F") {
                                     weatherManager.unitsString = "imperial"
                                     weatherManager.requestLocation()
-                                    
-                                })
-                                alertController.addAction(CAction)
-                                alertController.addAction(FAction)
-                                
-                                let scenes = UIApplication.shared.connectedScenes
-                                let windowScene = scenes.first as? UIWindowScene
-                                let window = windowScene?.windows.first
-                                let rootVC = window?.rootViewController ?? nil
-                                rootVC?.present(alertController, animated: true, completion: nil)
+                                }
                             }
-                            
-                            if screenWidth == 320 {
-                                BottomIconsView(
-                                    humidity: humidityString,
-                                    precipitation: precipitationString,
-                                    pressure: pressureString,
-                                    windSpeed: windSpeedString,
-                                    windUnits: weatherManager.unitsStringWindUI,
-                                    windDirectionOutput: windDirectionOutputString,
-                                    isScreenSmall: true
-                                )
-                            } else {
-                                BottomIconsView(
-                                    humidity: humidityString,
-                                    precipitation: precipitationString,
-                                    pressure: pressureString,
-                                    windSpeed: windSpeedString,
-                                    windUnits: weatherManager.unitsStringWindUI,
-                                    windDirectionOutput: windDirectionOutputString
-                                )
-                            }
+                            BottomIconsView(
+                                humidity: humidityString,
+                                precipitation: precipitationString,
+                                pressure: pressureString,
+                                windSpeed: windSpeedString,
+                                windUnits: weatherManager.unitsStringWindUI,
+                                windDirectionOutput: windDirectionOutputString,
+                                isScreenSmall: screenWidth == 320
+                            )
                         } else {
                             if weatherManager.locationAuthorized {
                                 ActivityIndicator()
@@ -157,50 +110,51 @@ struct TodayView: View, WeatherManagerDelegate {
                             
                             Spacer()
                         }
-                
                     } // end of foreground
                     .ignoresSafeArea(.keyboard)
-
                 }
             }
             .onAppear {
                 weatherManager.locationManager.requestWhenInUseAuthorization()
-                weatherManager.delegate = self
-                
                 if !weatherManager.weatherDataAvailable && weatherManager.locationAuthorized {
                     
                     weatherManager.requestLocation()
                 }
             }
+            .onChange(of: weatherManager.weather) { weather in
+                updateWeatherData(with: weather)
+            }
+            .onChange(of: weatherManager.forecastList.first) { forecast in
+                guard let forecast else {
+                    return
+                }
+                self.precipitationString = forecast.precipitationString
+            }
+            .alert(isPresented: $weatherManager.fetchingError) {
+                Alert(
+                    title: Text("Wrong city name"),
+                    message: Text("Please enter correct city name.")
+                )
+            }
         }
     }
     
-    func updateWeatherData() {
-        if weatherManager.forecastList.isEmpty {
-            print("weatherManager.forecastList.isEmpty")
-        } else {
-            
-            let weather = weatherManager.weather
-            let forecast = weatherManager.forecastList[0]
-            
-            self.temperatureString = weather.temperatureString
-            self.conditionNameString = weather.conditionName
-            self.cityName = weather.cityName
-            self.stateName = weather.stateName
-            self.humidityString = weather.humidityString
-            self.windSpeedString = weather.windSpeedString
-            self.windDirectionOutputString = weather.windDirectionOutputString
-            self.pressureString = weather.pressureString
-            self.weatherOutputTextString = weather.weatherOutputText
-            self.precipitationString = forecast.precipitationString
-        }
+    private func updateWeatherData(with weather: TodayWeatherModel) {
+        self.temperatureString = weather.temperatureString
+        self.conditionNameString = weather.conditionName
+        self.cityName = weather.cityName
+        self.stateName = weather.stateName
+        self.humidityString = weather.humidityString
+        self.windSpeedString = weather.windSpeedString
+        self.windDirectionOutputString = weather.windDirectionOutputString
+        self.pressureString = weather.pressureString
+        self.weatherOutputTextString = weather.weatherOutputText
     }
 }
 
 struct TodayTab_Previews: PreviewProvider {
     static var previews: some View {
         TodayView()
-            .environmentObject(WeatherManager())
-        // ContentView()
+            .environmentObject(WeatherManagerVM())
     }
 }

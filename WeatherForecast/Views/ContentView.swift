@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @StateObject var weatherManager = WeatherManager()
+    @StateObject var weatherManager = WeatherManagerVM()
     @State private var selection: Tab = .today
     
     enum Tab {
@@ -47,7 +47,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .preferredColorScheme(.dark)
-            .environmentObject(WeatherManager())
+            .environmentObject(WeatherManagerVM())
             
     }
 }

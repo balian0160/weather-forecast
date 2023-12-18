@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ForecastWeatherModel {
+struct ForecastWeatherModel: Equatable {
     let conditionId: Int
     let temperature, precipitation: Double
     let dtText: String

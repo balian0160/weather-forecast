@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ForecastView: View {
     
-    @EnvironmentObject var weatherManager: WeatherManager
+    @EnvironmentObject var weatherManager: WeatherManagerVM
     @ObservedObject var monitor = NetworkMonitor()
     
     let dayOfWeek = Date().dayNumberOfWeek()
@@ -21,7 +21,6 @@ struct ForecastView: View {
             NoConnectionView()
         } else {
             NavigationView {
-                
                 if weatherManager.weatherDataAvailable {
                     VStack {
                         HStack {
@@ -45,13 +44,12 @@ struct ForecastView: View {
                 }
             }
         }
-        
     }
 }
 
 struct ForecastTab_Previews: PreviewProvider {
     static var previews: some View {
         ForecastView()
-            .environmentObject(WeatherManager())
+            .environmentObject(WeatherManagerVM())
     }
 }

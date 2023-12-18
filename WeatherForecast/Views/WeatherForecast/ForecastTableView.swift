@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ForecastTableView: UIViewRepresentable {
-    @EnvironmentObject var weatherManager: WeatherManager
+    @EnvironmentObject var weatherManager: WeatherManagerVM
     
     func makeCoordinator() -> Coordinator {
         // pass @EnvironmentObject to coordinator
@@ -32,7 +32,7 @@ struct ForecastTableView: UIViewRepresentable {
     }
     
     class Coordinator: NSObject, UITableViewDataSource, UITableViewDelegate {
-        var weatherManagerCoordinator: WeatherManager
+        var weatherManagerCoordinator: WeatherManagerVM
         var forecastList: [ForecastWeatherModel]
         var forecastOffset: Int
         let daysOfWeek: [String] = ["Sunday", "Moday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -41,7 +41,7 @@ struct ForecastTableView: UIViewRepresentable {
         
         let screenWidth = UIScreen.main.bounds.size.width
        
-        init(weatherManager: WeatherManager) {
+        init(weatherManager: WeatherManagerVM) {
             self.forecastList = weatherManager.forecastList
             self.forecastOffset = weatherManager.forecastOffset
             self.weatherManagerCoordinator = weatherManager
@@ -138,46 +138,26 @@ struct ForecastTableView: UIViewRepresentable {
             }
             cell.selectionStyle = .none
             
-            
             switch indexPath.section {
             case 0:
                 let index = indexPath.row
-                cell.imageViewCell.image = UIImage(systemName: forecastList[index].conditionName, withConfiguration: largeConfiguration)
-                cell.timeLabel.text = forecastList[index].timeString
-                cell.predictionLabel.text = forecastList[index].weatherOutputText
-                cell.tempLabel.text = forecastList[index].temperatureString + unitsString
-                
+                cell.updateCell(forecast: forecastList[index], unitsString: unitsString)
             case 1:
                 let index = indexPath.row + forecastOffset
-                cell.imageViewCell.image = UIImage(systemName: forecastList[index].conditionName, withConfiguration: largeConfiguration)
-                cell.timeLabel.text = forecastList[index].timeString
-                cell.predictionLabel.text = forecastList[index].weatherOutputText
-                cell.tempLabel.text = forecastList[index].temperatureString + unitsString
-                
+                cell.updateCell(forecast: forecastList[index], unitsString: unitsString)
             case 2:
                 let index = indexPath.row + forecastOffset + 8
-                cell.imageViewCell.image = UIImage(systemName: forecastList[index].conditionName, withConfiguration: largeConfiguration)
-                cell.timeLabel.text = forecastList[index].timeString
-                cell.predictionLabel.text = forecastList[index].weatherOutputText
-                cell.tempLabel.text = forecastList[index].temperatureString + unitsString
-                
+                cell.updateCell(forecast: forecastList[index], unitsString: unitsString)
             case 3:
                 let index = indexPath.row + forecastOffset + 16
-                cell.imageViewCell.image = UIImage(systemName: forecastList[index].conditionName, withConfiguration: largeConfiguration)
-                cell.timeLabel.text = forecastList[index].timeString
-                cell.predictionLabel.text = forecastList[index].weatherOutputText
-                cell.tempLabel.text = forecastList[index].temperatureString + unitsString
-                
+                cell.updateCell(forecast: forecastList[index], unitsString: unitsString)
             case 4:
                 let index = indexPath.row + forecastOffset + 24
-                cell.imageViewCell.image = UIImage(systemName: forecastList[index].conditionName, withConfiguration: largeConfiguration)
-                cell.timeLabel.text = forecastList[index].timeString
-                cell.predictionLabel.text = forecastList[index].weatherOutputText
-                cell.tempLabel.text = forecastList[index].temperatureString + unitsString
+                cell.updateCell(forecast: forecastList[index], unitsString: unitsString)
             default:
                 fatalError("Cell is not loaded")
             }
-    
+
             return cell
         }
     }
@@ -186,6 +166,6 @@ struct ForecastTableView: UIViewRepresentable {
 struct ForecastTableView_Previews: PreviewProvider {
     static var previews: some View {
         ForecastTableView()
-            .environmentObject(WeatherManager())
+            .environmentObject(WeatherManagerVM())
     }
 }

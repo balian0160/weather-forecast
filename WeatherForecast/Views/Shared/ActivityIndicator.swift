@@ -14,8 +14,8 @@ struct ActivityIndicator: View {
     var body: some View {
         Circle()
             .trim(from: 0.0, to: 0.6)
-            .stroke(Color("gradientEndColor"), lineWidth: 10.0)
-            .frame(width: 120, height: 120)
+            .stroke(Color("gradientEndColor"), lineWidth: 5.0)
+            .frame(width: 50)
             .rotationEffect(Angle(degrees: degress))
             .onAppear(perform: { self.start() })
     }
