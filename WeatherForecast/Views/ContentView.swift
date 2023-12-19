@@ -18,7 +18,6 @@ struct ContentView: View {
     }
     
     init() {
-        
         UITabBar.appearance().barTintColor = UIColor(named: "barTintColor")
         UITabBar.appearance().backgroundColor = UIColor(named: "barBackgroundColor")
     }
@@ -38,7 +37,7 @@ struct ContentView: View {
                 }
                 .tag(Tab.forecast)
         }
-        .accentColor(Color("tabBarLabelColor"))
+        .accentColor(.tabBarLabelColor)
         .environmentObject(weatherManager)
     }
 }

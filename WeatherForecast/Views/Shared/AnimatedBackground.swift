@@ -12,7 +12,7 @@ struct AnimatedBackground: View {
     @State var end = UnitPoint.topLeading
 
     let timer = Timer.publish(every: 1, on: .main, in: .default).autoconnect()
-    let colors: [Color] = [.init("gradientStartColor"), .init("gradientMiddleColor1"), .init("gradientMiddleColor2"), .init("gradientEndColor")]
+    let colors: [Color] = [.gradientStartColor, .gradientMiddleColor1, .gradientMiddleColor2, .gradientEndColor]
 
     var body: some View {
         LinearGradient(gradient: Gradient(colors: colors), startPoint: start, endPoint: end)

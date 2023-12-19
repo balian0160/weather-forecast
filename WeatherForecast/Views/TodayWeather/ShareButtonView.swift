@@ -39,15 +39,14 @@ struct ShareButtonView: View {
             HStack {
                 Spacer()
                 Text("Share")
-                    .font(.system(size: 14, weight: .regular))
-                    .foregroundColor(Color("shareButtonTextColor"))
+                    .font(.regularLabel)
+                    .foregroundColor(.shareButtonTextColor)
                 Spacer()
             }
             .padding(.vertical, 8)
-            .background(Color("shareButtonBackColor"))
+            .background(Color.shareButtonBackColor)
             .cornerRadius(32)
             .shadow(radius: 15)
-            
         }
         .frame(width: 85, height: 45)
         .padding(.horizontal, 20)

@@ -38,7 +38,6 @@ struct BottomIconsView: View {
         
     var body: some View {
         VStack(alignment: .leading) {
-            
             HStack(alignment: .center) {
                 VStack {
                     if !isScreenSmall {
@@ -47,15 +46,15 @@ struct BottomIconsView: View {
                             .frame(width: 24, height: 24)
                             .foregroundColor(Color(.label))
                             .padding(8)
-                            .background(Color("IconBackgroundColor"))
+                            .background(Color.iconBackgroundColor)
                             .cornerRadius(64)
                     }
                     
                     Text(humidity + " %")
-                        .font(.system(size: 18, weight: .regular))
+                        .font(.bottomIconsTitle)
                     Text("Humidity")
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(Color("labelColor"))
+                        .font(.bottomIconsSubtitle)
+                        .foregroundColor(.labelColor)
                 }
                 .frame(width: iconWidth(), height: 90)
                 
@@ -66,15 +65,15 @@ struct BottomIconsView: View {
                             .frame(width: 24, height: 24)
                             .foregroundColor(Color(.label))
                             .padding(8)
-                            .background(Color("IconBackgroundColor"))
+                            .background(Color.iconBackgroundColor)
                             .cornerRadius(64)
                     }
                     
                     Text(precipitation + " MM")
-                        .font(.system(size: 18, weight: .regular))
+                        .font(.bottomIconsTitle)
                     Text("Precipitation")
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(Color("labelColor"))
+                        .font(.bottomIconsSubtitle)
+                        .foregroundColor(.labelColor)
                 }
                 .frame(width: iconWidth(), height: 90)
                 
@@ -85,16 +84,15 @@ struct BottomIconsView: View {
                             .frame(width: 24, height: 24)
                             .foregroundColor(Color(.label))
                             .padding(8)
-                            .background(Color("IconBackgroundColor"))
+                            .background(Color.iconBackgroundColor)
                             .cornerRadius(64)
                     }
                     
-                    
                     Text(pressure + " hPa")
-                        .font(.system(size: 18, weight: .regular))
+                        .font(.bottomIconsTitle)
                     Text("Pressure")
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(Color("labelColor"))
+                        .font(.bottomIconsSubtitle)
+                        .foregroundColor(.labelColor)
                 }
                 .frame(width: iconWidth(), height: 90)
             }
@@ -107,15 +105,15 @@ struct BottomIconsView: View {
                             .frame(width: 24, height: 24)
                             .foregroundColor(Color(.label))
                             .padding(8)
-                            .background(Color("IconBackgroundColor"))
+                            .background(Color.iconBackgroundColor)
                             .cornerRadius(64)
                     }
                     
                     Text(windSpeed + windUnits)
-                        .font(.system(size: 18, weight: .regular))
+                        .font(.bottomIconsTitle)
                     Text("Wind")
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(Color("labelColor"))
+                        .font(.bottomIconsSubtitle)
+                        .foregroundColor(.labelColor)
                 }
                 .frame(width: iconWidth(), height: 90)
                 
@@ -126,19 +124,18 @@ struct BottomIconsView: View {
                             .frame(width: 24, height: 24)
                             .foregroundColor(Color(.label))
                             .padding(8)
-                            .background(Color("IconBackgroundColor"))
+                            .background(Color.iconBackgroundColor)
                             .cornerRadius(64)
                     }
                     
                     Text(windDirectionOutput)
-                        .font(.system(size: 18, weight: .regular))
+                        .font(.bottomIconsTitle)
                     Text("Direction")
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(Color("labelColor"))
+                        .font(.bottomIconsSubtitle)
+                        .foregroundColor(.labelColor)
                 }
                 .frame(width: iconWidth(), height: 90)
             }
-            
         }
         .padding(.vertical, 10)
     }

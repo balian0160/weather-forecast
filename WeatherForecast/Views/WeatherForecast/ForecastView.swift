@@ -32,7 +32,7 @@ struct ForecastView: View {
                         .font(.system(size: 22, weight: .bold))
                 } else {
                     if !weatherManager.locationAuthorized {
-                        Text("Search for data")
+                        Text("Searching for data")
                     } else {
                         VStack {
                             ActivityIndicator()

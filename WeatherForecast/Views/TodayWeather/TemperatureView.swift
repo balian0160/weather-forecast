@@ -40,12 +40,12 @@ struct TemperatureView: View {
                     .font(.system(size: 40))
                     // .resizable()
                     .frame(width: 42, height: 42)
-                    .foregroundColor(Color(.label))
+                    .foregroundColor(.labelColor)
                 Text(temperature + units)
-                    .font(.system(size: 30, weight: .semibold))
+                    .font(.temperatureTitle)
                 Text(city + ", " + state)
-                    .font(.system(size: 16, weight: .light))
-                    .foregroundColor(Color("labelColor"))
+                    .font(.temperatureSubtitle)
+                    .foregroundColor(.labelColor)
             }
         }
     }

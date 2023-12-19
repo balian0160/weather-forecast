@@ -75,8 +75,7 @@ struct SearchBarView: View {
                 .submitLabel(.search)
                 .frame(width: 164, height: 32)
                 .padding(EdgeInsets(top: 0, leading: 6, bottom: 0, trailing: 6))
-   
-                .background(Color("SearchFieldColor"))
+                .background(Color.searchFieldColor)
                 .cornerRadius(8)
                 .shadow(radius: 5)
                 .focused($textFieldIsFocused)

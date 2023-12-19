@@ -49,11 +49,11 @@ struct EnableLocationView: View {
                     Spacer()
                     Text("Enable location")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(Color("shareButtonTextColor"))
+                        .foregroundColor(.shareButtonTextColor)
                     Spacer()
                 }
                 .padding(.vertical, 8)
-                .background(Color("shareButtonBackColor"))
+                .background(Color.shareButtonBackColor)
                 .cornerRadius(32)
                 .shadow(radius: 15)
             }
